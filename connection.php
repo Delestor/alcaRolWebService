@@ -7,16 +7,18 @@ Objectiu: Classe que gestiona la connexió i les consultes que es fan a la base 
 Fitxers relacionats: mainPage.php
 */
 
-ob_start();
 session_start();
 
 class Connexio {
 
     protected static $connection;
-    protected static $host = "52.56.253.209";
+    //protected static $host = "52.56.253.209";
+	protected static $host = "localhost";
     protected static $servername = "alcaroldb";
-    protected static $username = "admin";
-    protected static $password = "bemen3";
+    //protected static $username = "admin";
+    //protected static $password = "bemen3";
+	protected static $username = "root";
+    protected static $password = "";
 
     /**
      * Constructor de la classe.
@@ -74,17 +76,19 @@ class Connexio {
      */
     public static function queryLoadUser($username, $password) {
         self::$connection = self::connect();
-        $query = ("SELECT dni, nom, cognoms, password, tipus "
-                . "FROM usuaris WHERE (dni = '" . $username . "' or nom = '" . $username . "' ) and password = '" . $password . "'");
+        $query = ("SELECT id, nombre, dni "
+                . "FROM usuarios WHERE (dni = '" . $username . "' or nombre = '" . $username . "' ) and password = '" . $password . "'");
         $result = mysqli_query(self::$connection, $query);
         if (mysqli_num_rows($result) > 0) {
             // output data of each row
             while ($row = mysqli_fetch_assoc($result)) {
                 //$_SESSION['conexion'] = $connection;
-                $_SESSION['nom_usuari'] = $row["nom"];
-                $_SESSION['tipus'] = $row["tipus"];
+                
                 $_SESSION['username'] = $username;
                 $_SESSION['password'] = $password;
+				$_SESSION['nombre'] = $row['nombre'];
+				$_SESSION['user_dni'] = $row['dni'];
+				$_SESSION['id'] = $row['id'];
 /*
                 if ($row["tipus"] == "cuiner") {
                     print json_encode(array('estado' => '1', 'mensaje' => 'Bienvenido '.$_SESSION['nom_usuari'], 'tipus' => 'cuiner'));
