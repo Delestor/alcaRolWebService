@@ -69,7 +69,7 @@ class Connexio {
 
     /**
      * Mètode encarregat de validar si el usuari i password están registrat
-     * a la base de dades, i també valida si és de tipus cuiner o maitre.
+     * a la base de dades.
      * @param type $username el nom d'usuari per el login
      * @param type $password el password del login
      * @return boolean retorna si la validació de l'usuari ha sigut vàlida o no.
@@ -108,6 +108,168 @@ class Connexio {
         }
     }
 
+    /*CARGA DE DATOS DE LOS ESTILOS:*/
+    /**
+     * Carga todos los estilos con todo su contenido de un usuario concreto.
+     * @param type $userId
+     * @return boolean
+     */
+    public static function queryListaEstilosCompletos($userId){
+        self::$connection = self::connect();
+        $query = ("SELECT * "
+                . "FROM estilos WHERE FK_id_usuario = ".$userId);
+        $result = mysqli_query(self::$connection, $query);
+        
+        $listaEstilos = array();
+        $count = 0;
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($result)) {
+                $listaEstilos["resultadoEstilo".$count] = array_map('utf8_encode',
+                ['id' => $row["id"], 
+                'id_usuario' => $row["FK_id_usuario"], 
+                'nombre' => $row["nombre"], 
+                'vida' => $row["vida"], 
+                'mana' => $row["mana"], 
+                'destreza' => $row["destreza"], 
+                'percepcion' => $row["percepcion"], 
+                'fuerza' => $row["fuerza"], 
+                'carisma' => $row["carisma"], 
+                'constitucion' => $row["constitucion"], 
+                'inteligencia' => $row["inteligencia"],
+                'sabiduria' => $row["sabiduria"]]);
+                
+                $count++;
+            }
+            print json_encode($listaEstilos);
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
+    /**
+     * Carga el listado de todos los estilos de un usuario concreto. Pero solo con
+     * la información del nombre y id de cada estlio.
+     * @param type $userId
+     * @return boolean
+     */
+    public static function queryListaEstilosSoloIdNombre($userId){
+        self::$connection = self::connect();
+        $query = ("SELECT id, FK_id_usuario, nombre "
+                . "FROM estilos WHERE FK_id_usuario = ".$userId);
+        $result = mysqli_query(self::$connection, $query);
+        
+        $listaEstilos = array();
+        $count = 0;
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($result)) {
+                $listaEstilos["resultadoEstilo".$count] = array_map('utf8_encode',
+                ['id' => $row["id"], 
+                'id_usuario' => $row["FK_id_usuario"], 
+                'nombre' => $row["nombre"]]);
+                
+                $count++;
+            }
+            print json_encode($listaEstilos);
+            return true;
+        } else {
+            print json_encode(array('estado' => '2','mensaje' => 'No tienes estilos creados'));
+            return false;
+        }
+        
+    }
+    
+    /**
+     * Carga toda la información de un estilo concreto.
+     * @param type $estiloId
+     * @return boolean
+     */
+    public static function queryEstiloByID($estiloId){
+        self::$connection = self::connect();
+        $query = ("SELECT * "
+                . "FROM estilos WHERE id = ".$estiloId);
+        $result = mysqli_query(self::$connection, $query);
+        
+        $listaEstilos = array();
+        $count = 0;
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($result)) {
+                $listaEstilos["resultadoEstilo".$count] = array_map('utf8_encode',
+                ['id' => $row["id"], 
+                'id_usuario' => $row["FK_id_usuario"], 
+                'nombre' => $row["nombre"], 
+                'vida' => $row["vida"], 
+                'mana' => $row["mana"], 
+                'destreza' => $row["destreza"], 
+                'percepcion' => $row["percepcion"], 
+                'fuerza' => $row["fuerza"], 
+                'carisma' => $row["carisma"], 
+                'constitucion' => $row["constitucion"], 
+                'inteligencia' => $row["inteligencia"],
+                'sabiduria' => $row["sabiduria"]]);
+                
+                $count++;
+            }
+            print json_encode($listaEstilos);
+            return true;
+        } else {
+            print json_encode(array('estado' => '2','mensaje' => 'No tienes estilos creados'));
+            return false;
+        }
+        
+    }
+    
+    /**
+     * Metodo par insertar un nuevo Estilo asignado a un id de Usuario.
+     * @param type $idUsuario
+     * @param type $datosNuevoEstilo
+     */
+    public static function queryInsertNuevoEstilo($idUsuario, $datosNuevoEstilo){
+        $query = "INSERT INTO estilos(FK_id_usuario, nombre, vida, mana, destreza, percepcion, fuerza, carisma, constitucion, inteligencia, sabiduria) "
+                . "values (".$idUsuario.","
+                . "'".$datosNuevoEstilo["nombre"]."',"
+                . "'".$datosNuevoEstilo["vida"]."',"
+                . "'".$datosNuevoEstilo["mana"]."',"
+                . "'".$datosNuevoEstilo["destreza"]."',"
+                . "'".$datosNuevoEstilo["percepcion"]."',"
+                . "'".$datosNuevoEstilo["fuerza"]."',"
+                . "'".$datosNuevoEstilo["carisma"]."',"
+                . "'".$datosNuevoEstilo["constitucion"]."',"
+                . "'".$datosNuevoEstilo["inteligencia"]."',"
+                . "'".$datosNuevoEstilo["sabiduria"]."')";
+        
+        $retorno = self::query($query);
+        if($retorno){
+            //Datos insertados correctamente.
+            print json_encode(array('estado' => '1','mensaje' => 'Datos insertados correctamente', 'id_estilo' => self::getLastEstiloCreadoByUser($idUsuario)));
+        }else{
+            //Fallo al insertar.
+            print json_encode(array('estado' => '2','mensaje' => 'Fallo al insertar'));
+        }
+    }
+    
+    /**
+     * Retorna la id del último estilo creado por el usuario.
+     * @param type $idUsuario
+     * @return type
+     */
+    public static function getLastEstiloCreadoByUser($idUsuario){
+        self::$connection = self::connect();
+        $query = ("SELECT id "
+                . "FROM estilos WHERE FK_id_usuario = ".$idUsuario." ORDER BY id DESC LIMIT 1");
+        $result = mysqli_query(self::$connection, $query);
+        $row = mysqli_fetch_assoc($result);
+        return $row["id"];
+    }
+    
+    /*FIN CARGA DE DATOS DE LOS ESTILOS.*/
     /**
      * Fetch rows from the database (SELECT query)
      *
