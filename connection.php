@@ -269,6 +269,21 @@ class Connexio {
         return $row["id"];
     }
     
+    public static function queryListaInfoTablaEstilos(){
+        self::$connection = self::connect();
+        $query = ("SHOW COLUMNS "
+                . "FROM estilos WHERE Field not Like 'id' and Field not Like 'FK_id_usuario' and Field not Like 'nombre'");
+        $result = mysqli_query(self::$connection, $query);
+        $count = 0;
+        $listaAtributos = array();
+        while($row = mysqli_fetch_assoc($result)){
+            $listaAtributos["resultadoAtributo".$count] = array_map('utf8_encode',
+                ['nombre' => $row["Field"]]);
+            $count++;
+        }
+        print json_encode($listaAtributos);
+    }
+    
     /*FIN CARGA DE DATOS DE LOS ESTILOS.*/
     /**
      * Fetch rows from the database (SELECT query)
