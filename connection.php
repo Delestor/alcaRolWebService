@@ -285,6 +285,33 @@ class Connexio {
     }
     
     /*FIN CARGA DE DATOS DE LOS ESTILOS.*/
+    
+    /*QUERYS PARA PERSONAJES*/
+    public static function queryInsertNuevoPersonaje($idUsuario, $datosNuevoEstilo){
+        $query = "INSERT INTO personajes(FK_id_usuario, FK_id_estilo, nombre, vida, mana, destreza, percepcion, fuerza, carisma, constitucion, inteligencia, sabiduria) "
+                . "values (".$idUsuario.","
+                . "'".$datosNuevoEstilo["id_estilo"]."',"
+                . "'".$datosNuevoEstilo["nombre"]."',"
+                . "'".$datosNuevoEstilo["vida"]."',"
+                . "'".$datosNuevoEstilo["mana"]."',"
+                . "'".$datosNuevoEstilo["destreza"]."',"
+                . "'".$datosNuevoEstilo["percepcion"]."',"
+                . "'".$datosNuevoEstilo["fuerza"]."',"
+                . "'".$datosNuevoEstilo["carisma"]."',"
+                . "'".$datosNuevoEstilo["constitucion"]."',"
+                . "'".$datosNuevoEstilo["inteligencia"]."',"
+                . "'".$datosNuevoEstilo["sabiduria"]."')";
+        
+        $retorno = self::query($query);
+        if($retorno){
+            //Datos insertados correctamente.
+            print json_encode(array('estado' => '1','mensaje' => 'Datos insertados correctamente'/*, 'id_personaje' => self::getLastEstiloCreadoByUser($idUsuario)*/));
+        }else{
+            //Fallo al insertar.
+            print json_encode(array('estado' => '2','mensaje' => 'Fallo al insertar'));
+        }
+    }
+    
     /**
      * Fetch rows from the database (SELECT query)
      *

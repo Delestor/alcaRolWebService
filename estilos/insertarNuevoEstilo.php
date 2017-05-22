@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'POST')
     if(isset($_REQUEST["id_usuario"]) && isset($_REQUEST["nombre"])){
         
         /*nombre, vida, mana, destreza, percepcion, fuerza, carisma, constitucion, inteligencia, sabiduria*/
-        $datosNuevoEstilo = array(
+        $datosNuevoPersonaje = array(
             'nombre' => $_REQUEST["nombre"],
             'vida' => isset($_REQUEST["vida"])?($_REQUEST["vida"]):'N',
             'mana' => isset($_REQUEST["mana"])?($_REQUEST["mana"]):'N',
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'POST')
             'sabiduria' => isset($_REQUEST["sabiduria"])?($_REQUEST["sabiduria"]):'N'
         );
         
-        Connexio::queryInsertNuevoEstilo($_REQUEST["id_usuario"], $datosNuevoEstilo);
+        Connexio::queryInsertNuevoEstilo($_REQUEST["id_usuario"], $datosNuevoPersonaje);
         
     }else{
         print json_encode(array('estado' => '2', 'mensaje' => 'Faltan Datos.'));
