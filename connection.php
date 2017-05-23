@@ -290,7 +290,7 @@ class Connexio {
     public static function queryInsertNuevoPersonaje($idUsuario, $datosNuevoEstilo){
         $query = "INSERT INTO personajes(FK_id_usuario, FK_id_estilo, nombre, vida, mana, destreza, percepcion, fuerza, carisma, constitucion, inteligencia, sabiduria) "
                 . "values (".$idUsuario.","
-                . "'".$datosNuevoEstilo["id_estilo"]."',"
+                . "".$datosNuevoEstilo["id_estilo"].","
                 . "'".$datosNuevoEstilo["nombre"]."',"
                 . "'".$datosNuevoEstilo["vida"]."',"
                 . "'".$datosNuevoEstilo["mana"]."',"
