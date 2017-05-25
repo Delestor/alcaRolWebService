@@ -315,9 +315,9 @@ class Connexio {
     public static function queryListaPersonajesCompletos($userId, $estiloId){
         self::$connection = self::connect();
         $query = ("SELECT * "
-                . "FROM personajes WHERE FK_id_usuario = ".$userId." and FK_id_estilo = ".$estiloId);
-        $result = mysqli_query(self::$connection, $query);
-        
+                . "FROM personajes WHERE FK_id_usuari = ".$userId." and FK_id_estilo = ".$estiloId);
+        $result = mysqli_query(self::$connection, $query) or die(mysqli_error(self::$connection));
+
         $listaPersonajes = array();
         $count = 0;
         
@@ -326,7 +326,7 @@ class Connexio {
             while ($row = mysqli_fetch_assoc($result)) {
                 $listaPersonajes["resultadoPersonaje".$count] = array_map('utf8_encode',
                 ['id' => $row["id"], 
-                'id_usuario' => $row["FK_id_usuario"], 
+                'id_usuario' => $row["FK_id_usuari"], 
                 'nombre' => $row["nombre"], 
                 'vida' => $row["vida"], 
                 'mana' => $row["mana"], 
