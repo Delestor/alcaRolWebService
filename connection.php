@@ -312,6 +312,42 @@ class Connexio {
         }
     }
     
+    public static function queryListaPersonajesCompletos($userId, $estiloId){
+        self::$connection = self::connect();
+        $query = ("SELECT * "
+                . "FROM personajes WHERE FK_id_usuario = ".$userId." and FK_id_estilo = ".$estiloId);
+        $result = mysqli_query(self::$connection, $query);
+        
+        $listaPersonajes = array();
+        $count = 0;
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while ($row = mysqli_fetch_assoc($result)) {
+                $listaPersonajes["resultadoPersonaje".$count] = array_map('utf8_encode',
+                ['id' => $row["id"], 
+                'id_usuario' => $row["FK_id_usuario"], 
+                'nombre' => $row["nombre"], 
+                'vida' => $row["vida"], 
+                'mana' => $row["mana"], 
+                'destreza' => $row["destreza"], 
+                'percepcion' => $row["percepcion"], 
+                'fuerza' => $row["fuerza"], 
+                'carisma' => $row["carisma"], 
+                'constitucion' => $row["constitucion"], 
+                'inteligencia' => $row["inteligencia"],
+                'sabiduria' => $row["sabiduria"]]);
+                
+                $count++;
+            }
+            print json_encode($listaPersonajes);
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+    
     /**
      * Fetch rows from the database (SELECT query)
      *
