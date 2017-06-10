@@ -282,7 +282,7 @@ class Connexio {
         $query = "DELETE FROM personajes WHERE FK_id_usuari = ".$idUsuario." and FK_id_estilo = ".$idEstilo;
         $retorno = self::query($query);
         if($retorno){
-            $query = "DELETE FROM estilos WHERE FK_id_usuari = ".$idUsuario." and id = ".$idEstilo;
+            $query = "DELETE FROM estilos WHERE FK_id_usuario = ".$idUsuario." and id = ".$idEstilo;
             $retorno = self::query($query);
             if($retorno){
                 print json_encode(array('estado' => '1', 'mensaje' => 'Estilo Borrado correctamente'));
