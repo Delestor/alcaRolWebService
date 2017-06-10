@@ -277,6 +277,24 @@ class Connexio {
         print json_encode($listaAtributos);
     }
 
+    public static function queryBorrarEstilo($idUsuario, $idEstilo){
+        
+        $query = "DELETE FROM personajes WHERE FK_id_usuari = ".$idUsuario." and FK_id_estilo = ".$idEstilo;
+        $retorno = self::query($query);
+        if($retorno){
+            $query = "DELETE FROM estilos WHERE FK_id_usuari = ".$idUsuario." and id = ".$idEstilo;
+            $retorno = self::query($query);
+            if($retorno){
+                print json_encode(array('estado' => '1', 'mensaje' => 'Estilo Borrado correctamente'));
+            }else{
+               print json_encode(array('estado' => '2', 'mensaje' => 'Fallo al borrar estilo')); 
+            }
+        }else{
+            print json_encode(array('estado' => '2', 'mensaje' => 'Fallo al borrar personajes'));
+        }
+        
+    }
+    
     /* FIN CARGA DE DATOS DE LOS ESTILOS. */
 
     /* QUERYS PARA PERSONAJES */
