@@ -315,7 +315,7 @@ class Connexio {
             if($key != 'nombre')$query .= ", ".$key." = '".$value."'";
             
         }
-        $query .= " WHERE id = ".$idPersonaje." and id_usuario = ".$idUsuario;
+        $query .= " WHERE id = ".$idPersonaje." and FK_id_usuari = ".$idUsuario;
         
         $retorno = self::query($query);
         if ($retorno) {
